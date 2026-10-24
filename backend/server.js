@@ -1256,8 +1256,15 @@ app.delete('/api/admin/hotels/:id', (req, res) => {
 // ─────────────────────────────────────────────
 // Serve Frontend Static Files (Production / Render)
 // ─────────────────────────────────────────────
-const frontendDist = path.join(__dirname, '../frontend/dist');
-if (fs.existsSync(frontendDist)) {
+const distCandidates = [
+  path.join(__dirname, '../dist'),
+  path.join(__dirname, '../frontend/dist'),
+  path.join(__dirname, 'dist')
+];
+const frontendDist = distCandidates.find(p => fs.existsSync(path.join(p, 'index.html')));
+
+if (frontendDist) {
+  console.log(`📦 Serving frontend static build from: ${frontendDist}`);
   app.use(express.static(frontendDist));
   app.use((req, res, next) => {
     if (req.method === 'GET' && !req.path.startsWith('/api')) {
