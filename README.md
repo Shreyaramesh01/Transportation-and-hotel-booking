@@ -1,12 +1,5 @@
 # 🚀 SmartTrip — Transportation & Booking System
 
-**Course Project | BCS403 | 4th Semester | AY 2025-26**  
-Department of Artificial Intelligence & Machine Learning  
-Government Engineering College, Hassan-573201
-
-**Team:** Shreya B R (4GH24AI047) | Nisarga (4GH24AI032)  
-**Guide:** Ms. Shirshika
-
 ---
 
 ## 📋 Project Overview
