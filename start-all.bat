@@ -1,5 +1,6 @@
 @echo off
 title SmartTrip Launcher
+cd /d "%~dp0"
 echo ========================================================
 echo   Starting SmartTrip Transport & Hotel Booking System
 echo ========================================================

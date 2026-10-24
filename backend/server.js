@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
@@ -765,13 +767,14 @@ function generateBookingId(type) {
 // Routes
 // ─────────────────────────────────────────────
 
-// GET / — health check
-app.get('/', (req, res) => {
+// GET /api/health — health check
+app.get('/api/health', (req, res) => {
   res.json({
     success: true,
     message: '✅ SmartTrip API Server is running!',
     version: '2.0.0',
     endpoints: [
+      'GET  /api/health',
       'GET  /api/cities',
       'POST /api/register',
       'POST /api/login',
@@ -1251,9 +1254,31 @@ app.delete('/api/admin/hotels/:id', (req, res) => {
 });
 
 // ─────────────────────────────────────────────
+// Serve Frontend Static Files (Production / Render)
+// ─────────────────────────────────────────────
+const frontendDist = path.join(__dirname, '../frontend/dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+      return res.sendFile(path.join(frontendDist, 'index.html'));
+    }
+    next();
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.json({
+      success: true,
+      message: '✅ SmartTrip API Server is running! (Frontend dist not built yet)',
+      version: '2.0.0'
+    });
+  });
+}
+
+// ─────────────────────────────────────────────
 // Start Server
 // ─────────────────────────────────────────────
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ SmartTrip API Server running at http://localhost:${PORT}`);
 });
